@@ -1,10 +1,11 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum Controls { mobile,pc}
+public enum Controls { mobile, pc }
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class PlayerController : MonoBehaviour
     public Animator playeranim;
 
     public Controls controlmode;
-   
+
 
     private float moveX;
     public bool isPaused = false;
@@ -35,20 +36,16 @@ public class PlayerController : MonoBehaviour
     private bool wasonGround;
 
 
-   // public GameObject projectile;
-   // public Transform firePoint;
+    // public GameObject projectile;
+    // public Transform firePoint;
 
     public float fireRate = 0.5f; // Time between each shot
     private float nextFireTime = 0f; // Time of the next allowed shot
 
-
-    
-
-
-
-
     private void Start()
     {
+        PhotonNetwork.SendRate = 60;
+        PhotonNetwork.SerializationRate = 30;
         rb = GetComponent<Rigidbody2D>();
         footEmissions = footsteps.emission;
 
@@ -62,6 +59,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (!GetComponent<PhotonView>().IsMine) return;
+
         isGroundedBool = IsGrounded();
 
         if (isGroundedBool)
@@ -113,33 +112,33 @@ public class PlayerController : MonoBehaviour
 
         //impactEffect
 
-        if(!wasonGround && isGroundedBool)
+        if (!wasonGround && isGroundedBool)
         {
             ImpactEffect.gameObject.SetActive(true);
             ImpactEffect.Stop();
-            ImpactEffect.transform.position = new Vector2(footsteps.transform.position.x,footsteps.transform.position.y-0.2f);
+            ImpactEffect.transform.position = new Vector2(footsteps.transform.position.x, footsteps.transform.position.y - 0.2f);
             ImpactEffect.Play();
         }
 
         wasonGround = isGroundedBool;
 
-        
+
     }
     public void SetAnimations()
     {
         if (moveX != 0 && isGroundedBool)
         {
             playeranim.SetBool("run", true);
-            footEmissions.rateOverTime= 35f;
+            footEmissions.rateOverTime = 35f;
         }
         else
         {
-            playeranim.SetBool("run",false);
+            playeranim.SetBool("run", false);
             footEmissions.rateOverTime = 0f;
         }
 
         playeranim.SetBool("isGrounded", isGroundedBool);
-       
+
     }
 
     private void FlipSprite(float direction)
@@ -158,11 +157,12 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         // Player movement
+        if (!GetComponent<PhotonView>().IsMine) return;
         if (controlmode == Controls.pc)
         {
             moveX = Input.GetAxis("Horizontal");
         }
-       
+
 
 
         rb.linearVelocity = new Vector2(moveX * moveSpeed, rb.linearVelocity.y);
@@ -184,12 +184,12 @@ public class PlayerController : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "killzone")
+        if (collision.gameObject.tag == "killzone")
         {
             GameManager.instance.Death();
         }
     }
-    
+
 
 
 

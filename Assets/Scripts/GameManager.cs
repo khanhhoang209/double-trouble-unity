@@ -1,6 +1,6 @@
-using UnityEngine;
-using TMPro;
 using System.Collections;
+using TMPro;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     private int coinCount = 0;
     private int gemCount = 0;
     private bool isGameOver = false;
-    private Vector3 playerPosition;
 
     //Level Complete
 
@@ -26,9 +25,9 @@ public class GameManager : MonoBehaviour
 
 
 
-   
+
     private int totalCoins = 0;
-  
+
 
 
 
@@ -42,9 +41,13 @@ public class GameManager : MonoBehaviour
     {
         UpdateGUI();
         UIManager.instance.fadeFromBlack = true;
-        playerPosition = playerController.transform.position;
 
         FindTotalPickups();
+    }
+
+    public void SetPlayerController(PlayerController playerController)
+    {
+        this.playerController = playerController;
     }
 
     public void IncrementCoinCount()
@@ -61,7 +64,7 @@ public class GameManager : MonoBehaviour
     private void UpdateGUI()
     {
         coinText.text = coinCount.ToString();
-  
+
     }
 
     public void Death()
@@ -86,7 +89,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Died");
         }
     }
- 
+
     public void FindTotalPickups()
     {
 
@@ -98,15 +101,15 @@ public class GameManager : MonoBehaviour
             {
                 totalCoins += 1;
             }
-           
+
         }
 
 
-      
+
     }
     public void LevelComplete()
     {
-       
+
 
 
         levelCompletePanel.SetActive(true);
@@ -114,14 +117,14 @@ public class GameManager : MonoBehaviour
 
 
 
-        levelCompleteCoins.text = "COINS COLLECTED: "+ coinCount.ToString() +" / " + totalCoins.ToString();
- 
+        levelCompleteCoins.text = "COINS COLLECTED: " + coinCount.ToString() + " / " + totalCoins.ToString();
+
     }
-   
+
     public IEnumerator DeathCoroutine()
     {
         yield return new WaitForSeconds(1f);
-        playerController.transform.position = playerPosition;
+        playerController.transform.position = new Vector3(Random.Range(-25, -22), 8f, 0);
 
         // Wait for 2 seconds
         yield return new WaitForSeconds(1f);
@@ -131,7 +134,7 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(1);
 
-            
+
         }
     }
 
