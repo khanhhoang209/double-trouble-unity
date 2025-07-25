@@ -1,9 +1,10 @@
 using System.Collections;
+using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager instance;
 
@@ -112,14 +113,12 @@ public class GameManager : MonoBehaviour
         {
             levelCompletePanel.SetActive(true);
             leveCompletePanelTitle.text = "NEED MORE COINS!";
-            levelCompleteCoins.text = "COINS COLLECTED: " + coinCount.ToString() + " / 26";
             StartCoroutine(HideLevelCompletePanel());
             return;
         }
 
         levelCompletePanel.SetActive(true);
         leveCompletePanelTitle.text = "LEVEL COMPLETE";
-        levelCompleteCoins.text = "COINS COLLECTED: " + coinCount.ToString() + " / 26";
 
         StartCoroutine(LoadNextLevel());
 
@@ -142,9 +141,7 @@ public class GameManager : MonoBehaviour
 
         if (isGameOver)
         {
-            SceneManager.LoadScene(1);
-
-
+            PhotonNetwork.LoadLevel(2);
         }
     }
 
@@ -157,7 +154,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator LoadNextLevel()
     {
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        PhotonNetwork.LoadLevel(3);
     }
 
 }
