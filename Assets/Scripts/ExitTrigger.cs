@@ -17,12 +17,23 @@ public class ExitTrigger : MonoBehaviour
     IEnumerator LevelExit()
     {
         //anim.SetTrigger("Exit");
-        yield return new WaitForSeconds(0.1f);
 
-        UIManager.instance.fadeToBlack = true;
+        // Chỉ gọi LevelComplete để kiểm tra coin, không tự động chuyển scene
+        if (GameManager.instance != null)
+        {
+            var win = GameManager.instance.CheckLevelComplete();
+            if (win == false)
+            {
+                Debug.Log("Not enough coins to complete the level.");
+            }
+            else
+            {
+                yield return new WaitForSeconds(0.5f);
 
-        yield return new WaitForSeconds(2f);
-        // Do something after flag anim
-        GameManager.instance.LevelComplete();
+                UIManager.instance.fadeToBlack = true;
+                Debug.Log("Enough coins to complete the level.");
+                GameManager.instance.LevelComplete();
+            }
+        }
     }
 }

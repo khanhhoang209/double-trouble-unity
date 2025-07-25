@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
 
     private void UpdateGUI()
     {
-        coinText.text = coinCount.ToString();
+        coinText.text = coinCount.ToString() + "/26";
 
     }
 
@@ -82,7 +82,6 @@ public class GameManager : MonoBehaviour
             // Start death coroutine to wait and then respawn the player
             StartCoroutine(DeathCoroutine());
 
-            // Update game state
             isGameOver = true;
 
             // Log death message
@@ -109,33 +108,56 @@ public class GameManager : MonoBehaviour
     }
     public void LevelComplete()
     {
-
-
+        if (coinCount < 26)
+        {
+            levelCompletePanel.SetActive(true);
+            leveCompletePanelTitle.text = "NEED MORE COINS!";
+            levelCompleteCoins.text = "COINS COLLECTED: " + coinCount.ToString() + " / 26";
+            StartCoroutine(HideLevelCompletePanel());
+            return;
+        }
 
         levelCompletePanel.SetActive(true);
         leveCompletePanelTitle.text = "LEVEL COMPLETE";
+        levelCompleteCoins.text = "COINS COLLECTED: " + coinCount.ToString() + " / 26";
 
-
-
-        levelCompleteCoins.text = "COINS COLLECTED: " + coinCount.ToString() + " / " + totalCoins.ToString();
+        StartCoroutine(LoadNextLevel());
 
     }
 
+    public bool CheckLevelComplete()
+    {
+        if (coinCount < 26)
+        {
+            return false;
+        }
+        return true;
+    }
     public IEnumerator DeathCoroutine()
     {
         yield return new WaitForSeconds(1f);
         playerController.transform.position = new Vector3(Random.Range(-25, -22), 8f, 0);
 
-        // Wait for 2 seconds
         yield return new WaitForSeconds(1f);
 
-        // Check if the game is still over (in case player respawns earlier)
         if (isGameOver)
         {
             SceneManager.LoadScene(1);
 
 
         }
+    }
+
+    private IEnumerator HideLevelCompletePanel()
+    {
+        yield return new WaitForSeconds(2f);
+        levelCompletePanel.SetActive(false);
+    }
+
+    private IEnumerator LoadNextLevel()
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
 }
