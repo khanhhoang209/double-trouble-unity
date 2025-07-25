@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         levelCompletePanel.SetActive(true);
         leveCompletePanelTitle.text = "LEVEL COMPLETE";
 
-        StartCoroutine(LoadNextLevel());
+        // StartCoroutine(LoadNextLevel());
 
     }
 
