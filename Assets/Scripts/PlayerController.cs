@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         PhotonNetwork.SendRate = 60;
-        PhotonNetwork.SerializationRate = 30;
+        PhotonNetwork.SerializationRate = 5;
         rb = GetComponent<Rigidbody2D>();
         footEmissions = footsteps.emission;
 
