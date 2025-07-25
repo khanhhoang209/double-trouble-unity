@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Photon.Pun;
 
 namespace FGUIStarter.Enemies
 {
@@ -8,17 +9,7 @@ namespace FGUIStarter.Enemies
         {
             if (collision.gameObject.CompareTag("Player"))
             {
-            
-                GameObject spawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint");
-                if (spawnPoint != null)
-                {
-                    collision.gameObject.transform.position = spawnPoint.transform.position;
-                }
-                else
-                {
-                    // Default spawn position if no spawn point is found
-                    collision.gameObject.transform.position = new Vector3(-25f, 8f, 0f);
-                }
+                PhotonNetwork.LoadLevel(3);
             }
         }
     }
