@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum Controls { mobile, pc }
 
@@ -48,6 +49,16 @@ public class PlayerController : MonoBehaviour
         PhotonNetwork.SerializationRate = 5;
         rb = GetComponent<Rigidbody2D>();
         footEmissions = footsteps.emission;
+
+        if (SceneManager.GetActiveScene().buildIndex == 3)
+        {
+            // Tìm và tắt component Light2D trên player
+            UnityEngine.Rendering.Universal.Light2D playerLight = GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>();
+            if (playerLight != null)
+            {
+                playerLight.enabled = false;
+            }
+        }
 
         if (controlmode == Controls.mobile)
         {
@@ -186,7 +197,8 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "killzone")
         {
-            GameManager.instance.Death();
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            PhotonNetwork.LoadLevel(currentSceneIndex);
         }
     }
 

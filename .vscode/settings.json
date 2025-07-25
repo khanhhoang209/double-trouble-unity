@@ -66,5 +66,6 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "DoubleTrouble.sln"
+    "dotnet.defaultSolution": "DoubleTrouble.sln",
+    "dotnet.preferCSharpExtension": true
 }
