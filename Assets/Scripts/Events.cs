@@ -9,10 +9,17 @@ public class Events : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
     public void Level()
     {
         SceneManager.LoadScene(1);
     }
+
+    public void ContinueGame()
+    {
+        SceneManager.LoadScene(3);
+    }
+
     public void Quit()
     {
         Application.Quit();
