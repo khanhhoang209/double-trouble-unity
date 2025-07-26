@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum Controls { mobile, pc }
 
@@ -197,8 +197,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "killzone")
         {
-            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-            PhotonNetwork.LoadLevel(currentSceneIndex);
+            transform.position = new Vector3(0, 5, 0);
         }
     }
 
